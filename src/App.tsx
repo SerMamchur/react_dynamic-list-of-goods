@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import './App.scss';
 import { GoodsList } from './GoodsList';
 import { Good } from './types/Good';
@@ -10,15 +10,18 @@ import { getAll, get5First, getRedGoods } from './api/goods';
 export const App: React.FC = () => {
   const [selectedGoods, setSelectedGoods] = useState<null | Good[]>(null);
 
-  function handleReloader(value: 'all' | 'firstFive' | 'color'): void {
-    if (value === 'all') {
-      getAll().then(goods => setSelectedGoods(goods));
-    } else if (value === 'firstFive') {
-      get5First().then(goods => setSelectedGoods(goods));
-    } else if (value === 'color') {
-      getRedGoods().then(goods => setSelectedGoods(goods));
-    }
-  }
+  const handleReloader = useCallback(
+    (value: 'all' | 'firstFive' | 'color'): void => {
+      if (value === 'all') {
+        getAll().then(goods => setSelectedGoods(goods));
+      } else if (value === 'firstFive') {
+        get5First().then(goods => setSelectedGoods(goods));
+      } else if (value === 'color') {
+        getRedGoods().then(goods => setSelectedGoods(goods));
+      }
+    },
+    [],
+  );
 
   return (
     <div className="App">
